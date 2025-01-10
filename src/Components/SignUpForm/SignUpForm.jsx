@@ -63,6 +63,10 @@ const SignUpForm = () => {
                 boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.1)",
               }}
             >
+              <Box sx={{ marginBottom: 4 }}>
+                <img src="/assets/logo.png" alt="" width={190} />
+              </Box>
+
               <Typography
                 variant="h4"
                 align="center"
@@ -185,13 +189,15 @@ const SignUpForm = () => {
                       type="submit"
                       fullWidth
                       variant="contained"
-                      color="primary"
                       size="large"
                       sx={{
+                        backgroundColor: "black",
+                        color: "white",
                         marginTop: 2,
                         borderRadius: 2,
                         "&:hover": {
-                          backgroundColor: "#4caf50", // Slightly different color on hover
+                          backgroundColor: "#ff0000", // Slightly different color on hover
+                          color: "white",
                         },
                       }}
                     >

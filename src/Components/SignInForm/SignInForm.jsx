@@ -59,13 +59,9 @@ const SignInForm = () => {
               elevation={6}
               sx={{ padding: 4, borderRadius: 3, backgroundColor: "#f9f9f9" }}
             >
-              <Typography
-                variant="h4"
-                align="center"
-                sx={{ marginBottom: 3, fontWeight: "bold" }}
-              >
-                Login To PitStop
-              </Typography>
+              <Box sx={{ marginBottom: 4 }}>
+                <img src="/assets/logo.png" alt="" width={190} />
+              </Box>
 
               <form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <Grid container spacing={2}>
@@ -125,13 +121,15 @@ const SignInForm = () => {
                       type="submit"
                       fullWidth
                       variant="contained"
-                      color="primary"
                       size="large"
                       sx={{
+                        backgroundColor:"black",
+                        color:"white",
                         marginTop: 2,
                         borderRadius: 2,
                         "&:hover": {
-                          backgroundColor: "#4caf50", // Slightly different color on hover
+                          backgroundColor: "#ff0000", // Slightly different color on hover
+                          color: "white"
                         },
                       }}
                     >
@@ -146,8 +144,8 @@ const SignInForm = () => {
                 <Typography variant="body2" color="text.secondary">
                   Don't have an account?{" "}
                   <Link
-                    to="/user/sign-up" // Link to the Sign-Up page
-                    style={{ textDecoration: "none", color: "#1976d2" }}
+                    to="/user/register/sign-up" // Link to the Sign-Up page
+                    style={{ textDecoration: "none", color: "black" }}
                   >
                     Sign Up
                   </Link>
