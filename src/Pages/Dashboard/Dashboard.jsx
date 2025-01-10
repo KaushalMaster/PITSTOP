@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import {
   Box,
   Container,
-  Grid,
-  Paper,
   Typography,
   Avatar,
   Menu,
@@ -19,17 +17,28 @@ import {
   Tooltip,
   AppBar,
   Toolbar,
+  ListItemIcon,
+  createTheme,
+  ThemeProvider,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid"; // DataGrid component from MUI X
-import { Link } from "react-router"; // To handle the navigation for sidebar
-import MenuIcon from "@mui/icons-material/Menu"; // Hamburger menu icon
+import { DataGrid } from "@mui/x-data-grid";
+import MenuIcon from "@mui/icons-material/Menu";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+
+// Create the theme with Roboto font
+const theme = createTheme({
+  typography: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif', // Set the font family
+  },
+});
 
 const Dashboard = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedTitle, setSelectedTitle] = useState("My Complaints");
   const [openSidebar, setOpenSidebar] = useState(true);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Detecting screen size
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   // Handle Avatar Menu
   const handleAvatarClick = (event) => {
@@ -37,6 +46,39 @@ const Dashboard = () => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  // Sidebar items with icons
+  const sidebarItems = [
+    {
+      text: "Dashboard",
+      icon: <DashboardIcon />,
+      onClick: () => {
+        setSelectedTitle("Dashboard");
+        if (isMobile) toggleSidebar(); // Close the sidebar on mobile
+      },
+    },
+    {
+      text: "My Complaints",
+      icon: <AccountCircleIcon />,
+      onClick: () => {
+        setSelectedTitle("My Complaints");
+        if (isMobile) toggleSidebar(); // Close the sidebar on mobile
+      },
+    },
+    {
+      text: "My Payments",
+      icon: <ExitToAppIcon />,
+      onClick: () => {
+        setSelectedTitle("My Payments");
+        if (isMobile) toggleSidebar(); // Close the sidebar on mobile
+      },
+    },
+  ];
+
+  // Toggle sidebar on mobile
+  const toggleSidebar = () => {
+    setOpenSidebar(!openSidebar);
   };
 
   // Example data for the DataGrid (for My Complaints)
@@ -52,7 +94,6 @@ const Dashboard = () => {
     { id: 3, complaint: "Complaint 3", status: "In Progress" },
   ];
 
-  // Example data for the DataGrid (for My Payments)
   const paymentColumns = [
     { field: "id", headerName: "ID", width: 90 },
     { field: "paymentId", headerName: "Payment ID", width: 180 },
@@ -66,108 +107,102 @@ const Dashboard = () => {
     { id: 3, paymentId: "12347", amount: "$200", status: "Failed" },
   ];
 
-  // Sidebar items
-  const sidebarItems = [
-    { text: "My Complaints", onClick: () => setSelectedTitle("My Complaints") },
-    { text: "My Payments", onClick: () => setSelectedTitle("My Payments") },
-  ];
-
-  // Toggle sidebar on mobile
-  const toggleSidebar = () => {
-    setOpenSidebar(!openSidebar);
-  };
-
   return (
-    <Box sx={{ display: "flex", height: "100vh" }}>
-      {/* Sidebar */}
-      <Drawer
-        sx={{
-          width: 240,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: 240,
-            backgroundColor: "#2c3e50",
-            color: "white",
-            boxSizing: "border-box",
-            paddingTop: 2,
-            display: "flex",
-            flexDirection: "column",
-          },
-        }}
-        variant={isMobile ? "temporary" : "permanent"}
-        open={openSidebar}
-        onClose={toggleSidebar}
-        ModalProps={{
-          keepMounted: true, // Better performance on mobile
-        }}
+    <ThemeProvider theme={theme}>
+      <Box
+        sx={{ display: "flex", height: "100vh", backgroundColor: "#f9f9f9" }}
       >
-        {/* Logo */}
-        <Box sx={{ padding: 2, display: "flex", justifyContent: "center" }}>
-          <Typography variant="h6" color="white">
-            Pitstop
-          </Typography>
-        </Box>
-        <Divider sx={{ backgroundColor: "#fff" }} />
-        {/* Sidebar Menu Items */}
-        <List sx={{ paddingTop: 2 }}>
-          {sidebarItems.map((item) => (
-            <ListItem button key={item.text} onClick={item.onClick}>
-              <ListItemText
-                primary={
-                  <Typography variant="body1" color="white">
-                    {item.text}
-                  </Typography>
-                }
-              />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-
-      {/* Main Container */}
-      <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        {/* AppBar */}
-        <AppBar
-          position="sticky"
+        {/* Sidebar */}
+        <Drawer
           sx={{
-            backgroundColor: "#f4f6f8",
-            color: "#000",
-            borderBottom: "1px solid #ccc",
-            zIndex: theme.zIndex.drawer + 1, // Ensure it stays above the drawer
+            width: 240,
+            flexShrink: 0,
+            "& .MuiDrawer-paper": {
+              width: 240,
+              backgroundColor: "#ffffff",
+              color: "#333",
+              boxSizing: "border-box",
+              paddingTop: 3,
+              display: "flex",
+              flexDirection: "column",
+              borderRight: "1px solid #ddd",
+              transition: "all 0.3s ease",
+            },
+          }}
+          variant={isMobile ? "temporary" : "permanent"}
+          open={openSidebar}
+          onClose={toggleSidebar}
+          ModalProps={{
+            keepMounted: true,
           }}
         >
-          <Toolbar>
-            {/* Hamburger Menu for Mobile */}
-            {isMobile && (
-              <Tooltip title="Open Sidebar">
-                <IconButton
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
-                  onClick={toggleSidebar}
-                  sx={{ mr: 2 }}
-                >
-                  <MenuIcon />
-                </IconButton>
-              </Tooltip>
-            )}
+          <Box
+            sx={{ display: "flex", justifyContent: "center", marginBottom: 3 }}
+          >
+            <img src="/assets/logo.png" alt="" width={150} />
+          </Box>
+          <Divider sx={{ backgroundColor: "#ddd" }} />
+          <List sx={{ paddingTop: 2 }}>
+            {sidebarItems.map((item) => (
+              <ListItem
+                button
+                key={item.text}
+                onClick={item.onClick}
+                sx={{
+                  "&:hover": { backgroundColor: "#f1f1f1" },
+                  cursor: "pointer",
+                  "&:selected": { backgroundColor: "yellow" },
+                }}
+              >
+                <ListItemIcon sx={{ color: "#333" }}>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} sx={{ color: "#333" }} />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
 
-            {/* Title */}
-            <Typography
-              variant="h6"
-              sx={{
-                flexGrow: 1,
-                fontWeight: "bold",
-                display: { xs: "none", sm: "block" },
-              }}
-            >
-              {selectedTitle}
-            </Typography>
-
-            {/* Avatar and Dropdown */}
-            <Box>
+        {/* Main Content */}
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            overflow: "auto",
+          }}
+        >
+          {/* AppBar */}
+          <AppBar
+            position="fixed"
+            sx={{
+              top: 0,
+              left: 0,
+              right: 0,
+              marginBottom: 2,
+              backgroundColor: "transparent",
+              color: "#333",
+              boxShadow: "none",
+              zIndex: theme.zIndex.drawer + 1,
+              display: "flex",
+              justifyContent: "flex-end", // Aligning avatar icon to the right
+            }}
+          >
+            <Toolbar>
+              {!openSidebar && isMobile && (
+                <Tooltip title="Open Sidebar">
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    onClick={toggleSidebar}
+                    sx={{ mr: 2 }}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
+              <Box sx={{ flexGrow: 1 }} /> {/* Push Avatar to the right */}
               <IconButton onClick={handleAvatarClick}>
-                <Avatar alt="User" src="/static/images/avatar/1.jpg" />
+                <Avatar />
               </IconButton>
               <Menu
                 anchorEl={anchorEl}
@@ -176,35 +211,40 @@ const Dashboard = () => {
               >
                 <MenuItem onClick={handleClose}>Logout</MenuItem>
               </Menu>
-            </Box>
-          </Toolbar>
-        </AppBar>
+            </Toolbar>
+          </AppBar>
 
-        {/* Hero Section */}
-        <Container
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            paddingTop: 4,
-            width: "100%",
-          }}
-        >
-          <Paper sx={{ padding: 3 }}>
+          {/* Hero Section */}
+          <Container
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              padding: 4,
+              width: "100%",
+              backgroundColor: "#ffffff",
+              borderRadius: 2,
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              marginTop: "80px", // Ensure content doesn't hide behind the fixed AppBar
+              overflowY: "auto", // Enable vertical scrolling on content
+              height: "calc(100vh - 80px)", // Full height minus AppBar
+            }}
+          >
             <Typography
               variant="h4"
               sx={{
-                display: "flex",
-                justifyContent: "flex-start",
                 fontWeight: "bold",
-                marginBottom: 2,
+                marginBottom: 2, // Spacing at the bottom of the title
+                color: "#333",
+                display: "flex",
+                justifyContent: "flex-start", // Align title at the start
               }}
             >
               {selectedTitle}
             </Typography>
 
             {/* DataGrid with Pagination based on selected title */}
-            <div style={{ height: 400, width: "100%", overflowX: "auto" }}>
+            <div style={{ height: 400, width: "100%" }}>
               {selectedTitle === "My Complaints" ? (
                 <DataGrid
                   rows={complaintRows}
@@ -225,10 +265,10 @@ const Dashboard = () => {
                 />
               )}
             </div>
-          </Paper>
-        </Container>
+          </Container>
+        </Box>
       </Box>
-    </Box>
+    </ThemeProvider>
   );
 };
 
